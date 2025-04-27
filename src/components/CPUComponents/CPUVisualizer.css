@@ -1,0 +1,490 @@
+:root {
+  --bg-dark: #1f2937;
+  --bg-medium: #374151;
+  --bg-light: #4b5563;
+  --text-primary: #f3f4f6;
+  --text-secondary: #d1d5db;
+  --accent-primary: #2dd4bf;
+  --accent-secondary: #a78bfa;
+  --border-color: #6b7280;
+  --active-border: var(--accent-primary);
+  --active-bg: #115e59; /* Darker Teal */
+  --shadow-color: rgba(0, 0, 0, 0.4);
+  --component-pc-bg: #3b82f6; /* Blue 500 */
+  --component-ir-bg: #10b981; /* Emerald 500 */
+  --component-decoder-bg: #f97316; /* Orange 500 */
+  --component-alu-bg: #ef4444; /* Red 500 */
+  --component-register-bg: #8b5cf6; /* Violet 500 */
+  --component-memory-bg: #ec4899; /* Pink 500 */
+  --button-bg: var(--accent-primary);
+  --button-text: #0f172a; /* Slate 900 */
+  --button-hover-bg: #5eead4; /* Teal 300 */
+  --button-disabled-bg: var(--bg-light);
+  --button-disabled-text: #9ca3af; /* Cool Gray 400 */
+}
+
+.cpu-visualizer {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  gap: 30px;
+}
+
+/* CPU图表区域 */
+.cpu-diagram {
+  position: relative;
+  height: 400px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background-color: var(--bg-dark);
+  padding: 20px;
+  overflow: hidden;
+}
+
+/* CPU组件通用样式 */
+.cpu-component {
+  position: absolute;
+  border: 2px solid var(--border-color);
+  border-radius: 6px;
+  background-color: var(--bg-medium);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  transition: all 0.3s ease;
+  color: var(--text-secondary);
+  box-shadow: 0 2px 5px var(--shadow-color);
+}
+
+/* 活动组件样式 */
+.cpu-component.active {
+  border-color: var(--active-border);
+  background-color: var(--active-bg);
+  color: var(--text-primary);
+  box-shadow: 0 0 10px hsla(172, 66%, 59%, 0.5); /* Adjusted shadow color to match accent */
+}
+
+/* 组件标签 */
+.component-label {
+  font-weight: bold;
+  font-size: 14px;
+  margin-bottom: 5px;
+}
+
+/* 组件值 */
+.component-value {
+  font-size: 12px;
+  text-align: center;
+  word-break: break-word;
+  max-width: 100%;
+}
+
+/* 特定组件样式 */
+.cpu-component.pc {
+  background-color: var(--component-pc-bg);
+}
+
+.cpu-component.ir {
+  background-color: var(--component-ir-bg);
+}
+
+.cpu-component.decoder {
+  background-color: var(--component-decoder-bg);
+}
+
+.cpu-component.alu {
+  background-color: var(--component-alu-bg);
+}
+
+.cpu-component.register {
+  background-color: var(--component-register-bg);
+}
+
+.cpu-component.memory {
+  background-color: var(--component-memory-bg);
+}
+
+/* 寄存器值样式 */
+.register-values {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  font-size: 12px;
+}
+
+.register-entry {
+  margin: 2px 0;
+  text-align: center;
+}
+
+/* 内存值样式 */
+.memory-values {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  font-size: 12px;
+}
+
+.memory-entry {
+  margin: 2px 0;
+  text-align: center;
+}
+
+/* 数据流动SVG */
+.data-flow-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* 数据流动路径 */
+.data-flow-path {
+  fill: none;
+  stroke: var(--border-color);
+  stroke-width: 2;
+  stroke-dasharray: 5, 5;
+}
+
+/* 活动数据流动路径 */
+.data-flow-path.active {
+  stroke: var(--accent-primary);
+  stroke-width: 3;
+  stroke-dasharray: none;
+}
+
+/* 数据流动指示器 */
+.data-flow-indicator {
+  fill: var(--accent-primary);
+  filter: drop-shadow(0 0 3px hsla(172, 66%, 59%, 0.8)); /* Adjusted shadow color */
+}
+
+/* 执行阶段显示 */
+.execution-stage {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-weight: bold;
+  color: var(--accent-primary);
+}
+
+/* 控制面板 */
+.control-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  background-color: var(--bg-medium);
+  border-radius: 8px;
+  padding: 20px;
+}
+
+/* 指令选择器 */
+.instruction-selector {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.instruction-selector h3 {
+  margin: 0;
+  color: var(--accent-primary);
+}
+
+/* 指令列表 */
+.instruction-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* 指令项 */
+.instruction-item {
+  background-color: var(--bg-light);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  flex: 1 1 calc(20% - 10px);
+  min-width: 150px;
+  color: var(--text-secondary);
+}
+
+.instruction-item:hover {
+  background-color: var(--bg-medium);
+  border-color: var(--accent-secondary);
+}
+
+.instruction-item.selected {
+  background-color: var(--active-bg);
+  border-color: var(--active-border);
+  box-shadow: 0 0 5px hsla(172, 66%, 59%, 0.5); /* Adjusted shadow color */
+  color: var(--text-primary);
+}
+
+.instruction-type {
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: var(--accent-primary);
+}
+
+.instruction-desc {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+/* 寄存器控制 */
+.register-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.register-controls h3 {
+  margin: 0;
+  color: var(--accent-primary);
+}
+
+.register-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.register-input-group {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: var(--bg-light);
+  padding: 8px;
+  border-radius: 4px;
+  flex: 1 1 calc(25% - 10px);
+  min-width: 100px;
+}
+
+.register-input-group label {
+  font-weight: bold;
+  color: var(--accent-primary);
+}
+
+.register-input-group input {
+  width: 60px;
+  background-color: var(--bg-medium);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 4px;
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.register-input-group input:focus {
+  border-color: var(--accent-primary);
+  outline: none;
+}
+
+.register-input-group input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* 内存控制 */
+.memory-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.memory-controls h3 {
+  margin: 0;
+  color: var(--accent-primary);
+}
+
+.memory-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.memory-input-group {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background-color: var(--bg-light);
+  padding: 8px;
+  border-radius: 4px;
+  flex: 1 1 calc(33% - 10px);
+  min-width: 120px;
+}
+
+.memory-input-group label {
+  font-weight: bold;
+  color: var(--accent-primary);
+}
+
+.memory-input-group input {
+  width: 60px;
+  background-color: var(--bg-medium);
+  border: 1px solid var(--border-color);
+  border-radius: 4px;
+  padding: 4px;
+  color: var(--text-primary);
+  text-align: center;
+}
+
+.memory-input-group input:focus {
+  border-color: var(--accent-primary);
+  outline: none;
+}
+
+.memory-input-group input:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.add-memory-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.add-memory-inputs {
+  display: flex;
+  gap: 10px;
+}
+
+.add-memory-button {
+  align-self: flex-start;
+  background-color: var(--accent-primary);
+  color: var(--button-text);
+  border: none;
+  border-radius: 4px;
+  padding: 8px 16px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.add-memory-button:hover:not(:disabled) {
+  background-color: var(--button-hover-bg);
+}
+
+.add-memory-button:disabled {
+  background-color: var(--button-disabled-bg);
+  color: var(--button-disabled-text);
+  cursor: not-allowed;
+}
+
+/* 执行控制 */
+.execution-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.execution-controls h3 {
+  margin: 0;
+  color: var(--accent-primary);
+}
+
+/* 速度控制 */
+.speed-control {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.speed-control input {
+  flex: 1;
+}
+
+/* 控制按钮 */
+.control-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.control-buttons button {
+  display: inline-flex; /* Ensure icon and text align */
+  align-items: center;
+  justify-content: center; /* Center content if button width allows */
+  flex: 1;
+  min-width: 100px;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  background-color: var(--button-bg);
+  color: var(--button-text);
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.control-buttons button svg {
+  margin-right: 8px; /* Add space between icon and text */
+}
+
+.control-buttons button:hover:not(:disabled) {
+  background-color: var(--button-hover-bg);
+}
+
+.control-buttons button:disabled {
+  background-color: var(--button-disabled-bg);
+  color: var(--button-disabled-text);
+  cursor: not-allowed;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+  :root {
+  --bg-dark: #1f2937;
+  --bg-medium: #374151;
+  --bg-light: #4b5563;
+  --text-primary: #f3f4f6;
+  --text-secondary: #d1d5db;
+  --accent-primary: #2dd4bf;
+  --accent-secondary: #a78bfa;
+  --border-color: #6b7280;
+  --active-border: var(--accent-primary);
+  --active-bg: #115e59; /* Darker Teal */
+  --shadow-color: rgba(0, 0, 0, 0.4);
+  --component-pc-bg: #3b82f6; /* Blue 500 */
+  --component-ir-bg: #10b981; /* Emerald 500 */
+  --component-decoder-bg: #f97316; /* Orange 500 */
+  --component-alu-bg: #ef4444; /* Red 500 */
+  --component-register-bg: #8b5cf6; /* Violet 500 */
+  --component-memory-bg: #ec4899; /* Pink 500 */
+  --button-bg: var(--accent-primary);
+  --button-text: #0f172a; /* Slate 900 */
+  --button-hover-bg: #5eead4; /* Teal 300 */
+  --button-disabled-bg: var(--bg-light);
+  --button-disabled-text: #9ca3af; /* Cool Gray 400 */
+}
+
+.cpu-visualizer {
+    padding: 10px;
+  }
+
+  .instruction-item {
+    flex: 1 1 calc(50% - 10px);
+  }
+
+  .control-buttons button {
+  display: inline-flex; /* Ensure icon and text align */
+  align-items: center;
+  justify-content: center; /* Center content if button width allows */
+    flex: 1 1 calc(50% - 5px);
+  }
+}
