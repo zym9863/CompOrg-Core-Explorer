@@ -14,9 +14,11 @@ CompOrg Core Explorer is a CPU instruction execution flow visualization tool dev
 - **Multiple Instruction Support**: Supports basic instructions such as ADD, SUB, LOAD, STORE, JUMP
 - **Interactive Operations**: Supports automatic execution, step-by-step execution, stop, and reset operations
 - **Status Monitoring**: Real-time display of register and memory value changes
+- **Memory Hierarchy Interactive Demo**: Visualizes the relationship between CPU, Cache, and Main Memory, demonstrating data access processes with hit/miss scenarios
 
 ## How to Use
 
+### CPU Core Visualizer
 1. Select an instruction from the predefined instruction list
 2. Use control buttons to execute instructions:
    - **Auto Execute**: Automatically complete all execution stages
@@ -25,6 +27,14 @@ CompOrg Core Explorer is a CPU instruction execution flow visualization tool dev
    - **Reset**: Reset CPU state
 3. Observe CPU component state changes and data flow
 4. You can modify register and memory values, or add new memory addresses
+
+### Memory Hierarchy Demo
+1. Select an operation type (Read/Write) and specify a memory address
+2. For write operations, enter the data value to be written
+3. Click "Execute Memory Operation" or use the control buttons
+4. Observe the data flow between CPU, Cache, and Main Memory
+5. Watch for cache hits and misses, and how data is transferred between memory levels
+6. You can modify main memory values or add new memory addresses
 
 ## Technical Implementation
 
@@ -55,11 +65,15 @@ npm run preview
 ```
 src/
 ├── components/
-│   └── CPUComponents/
-│       ├── CPUVisualizer.tsx  # CPU visualization main component
-│       └── CPUVisualizer.css  # Style file
+│   ├── CPUComponents/
+│   │   ├── CPUVisualizer.tsx  # CPU visualization main component
+│   │   └── CPUVisualizer.css  # Style file
+│   └── MemoryHierarchy/
+│       ├── MemoryHierarchyVisualizer.tsx  # Memory hierarchy visualization component
+│       └── MemoryHierarchyVisualizer.css  # Style file
 ├── models/
-│   └── CPUModel.ts            # CPU model definition
+│   ├── CPUModel.ts            # CPU model definition
+│   └── MemoryHierarchyModel.ts # Memory hierarchy model definition
 ├── App.tsx                    # Application main component
 ├── main.tsx                   # Entry file
 └── ...
@@ -71,4 +85,6 @@ src/
 - Implement instruction sequence execution functionality
 - Add more detailed execution process explanations
 - Support custom instruction creation
-- Add multi-language support
+- Enhance the Memory Hierarchy Demo with different cache mapping policies
+- Add visualization for cache replacement algorithms
+- Implement multi-level cache hierarchy simulation

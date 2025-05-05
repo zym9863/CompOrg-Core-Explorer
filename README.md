@@ -14,9 +14,11 @@ CompOrg Core Explorer 是一个基于 React 开发的 CPU 指令执行流程可�
 - **多种指令支持**：支持 ADD、SUB、LOAD、STORE、JUMP 等基本指令
 - **交互式操作**：支持自动执行、单步执行、停止和重置等操作
 - **状态监控**：实时显示寄存器和内存的值变化
+- **存储器层次结构交互演示**：可视化展示CPU、高速缓存（Cache）、主存（Main Memory）之间的关系和数据访问过程，演示命中（Hit）或缺失（Miss）的情况
 
 ## 使用方法
 
+### CPU 核心可视化
 1. 从预定义指令列表中选择一条指令
 2. 使用控制按钮执行指令：
    - **自动执行**：自动完成所有执行阶段
@@ -25,6 +27,14 @@ CompOrg Core Explorer 是一个基于 React 开发的 CPU 指令执行流程可�
    - **重置**：重置 CPU 状态
 3. 观察 CPU 组件状态变化和数据流动
 4. 可以修改寄存器和内存的值，或添加新的内存地址
+
+### 存储器层次结构演示
+1. 选择操作类型（读取/写入）并指定内存地址
+2. 对于写入操作，输入要写入的数据值
+3. 点击"执行内存操作"或使用控制按钮
+4. 观察 CPU、高速缓存和主存之间的数据流动
+5. 查看缓存命中和缺失情况，以及数据在不同存储层次间的传输过程
+6. 可以修改主存值或添加新的内存地址
 
 ## 技术实现
 
@@ -55,11 +65,15 @@ npm run preview
 ```
 src/
 ├── components/
-│   └── CPUComponents/
-│       ├── CPUVisualizer.tsx  # CPU可视化主组件
-│       └── CPUVisualizer.css  # 样式文件
+│   ├── CPUComponents/
+│   │   ├── CPUVisualizer.tsx  # CPU可视化主组件
+│   │   └── CPUVisualizer.css  # 样式文件
+│   └── MemoryHierarchy/
+│       ├── MemoryHierarchyVisualizer.tsx  # 存储器层次结构可视化组件
+│       └── MemoryHierarchyVisualizer.css  # 样式文件
 ├── models/
-│   └── CPUModel.ts            # CPU模型定义
+│   ├── CPUModel.ts            # CPU模型定义
+│   └── MemoryHierarchyModel.ts # 存储器层次结构模型定义
 ├── App.tsx                    # 应用主组件
 ├── main.tsx                   # 入口文件
 └── ...
@@ -71,4 +85,6 @@ src/
 - 实现指令序列执行功能
 - 添加更详细的执行过程说明
 - 支持自定义指令创建
-- 添加多语言支持
+- 增强存储器层次结构演示，支持不同的缓存映射策略
+- 添加缓存替换算法的可视化
+- 实现多级缓存层次结构模拟
