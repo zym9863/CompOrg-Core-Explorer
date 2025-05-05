@@ -10,7 +10,6 @@ import {
   MemoryAccessOperation,
   MemoryHierarchyState,
   initialMemoryHierarchyState,
-  isCacheHit,
   getCacheIndex,
   getCacheTag
 } from '../../models/MemoryHierarchyModel';
